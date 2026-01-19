@@ -27,7 +27,6 @@ flowchart LR
   C --> D[Compute profit / loss]
   D --> E[Show portfolio summary (table & charts)]
   E --> F[Export / Reports (CSV, PDF)]
-```
 
 ## Example visuals to include
 Add the following images to `docs/images/` and reference them in the README:
