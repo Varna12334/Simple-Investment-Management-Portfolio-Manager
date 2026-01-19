@@ -14,7 +14,9 @@ Quick visual guide below will help viewers understand the app at a glance — wh
 - Add investments (stock / mutual fund) — docs/images/add.png
 - Calculate total investment — docs/images/total.png
 - Calculate profit or loss — docs/images/profit.png
-- Show portfolio summary (table + charts) — docs/images/summary.png
+- Show portfolio summary (table + charts) — https://acrobat.adobe.com/id/urn:aaid:sc:AP:c9ea9f42-541f-4678-8713-bd72b2c2a10b
+
+
 
 ## Workflow (diagram)
 https://acrobat.adobe.com/id/urn:aaid:sc:AP:4aabf1d6-a50c-4283-9aaf-ed814f44c886
