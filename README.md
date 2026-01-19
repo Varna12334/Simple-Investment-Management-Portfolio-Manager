@@ -20,13 +20,13 @@ Quick visual guide below will help viewers understand the app at a glance — wh
 
 ## Workflow (diagram)
 https://acrobat.adobe.com/id/urn:aaid:sc:AP:4aabf1d6-a50c-4283-9aaf-ed814f44c886
-
+'''
 flowchart LR
   A[User: Add investment] --> B[Store investment record]
   B --> C[Calculate totals & current value]
   C --> D[Compute profit / loss]
   D --> E[Show portfolio summary (table & charts)]
-  E --> F[Export / Reports (CSV, PDF)]
+  E --> F[Export / Reports (CSV, PDF)]'''
 
 ## Example visuals to include
 Add the following images to `docs/images/` and reference them in the README:
