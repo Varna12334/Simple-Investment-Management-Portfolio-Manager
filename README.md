@@ -20,7 +20,7 @@ Quick visual guide below will help viewers understand the app at a glance — wh
 
 ## Workflow (diagram)
 https://acrobat.adobe.com/id/urn:aaid:sc:AP:4aabf1d6-a50c-4283-9aaf-ed814f44c886
-```mermaid
+
 flowchart LR
   A[User: Add investment] --> B[Store investment record]
   B --> C[Calculate totals & current value]
