@@ -5,16 +5,16 @@ A small tool to manage investments (stocks / mutual funds), calculate total inve
 ---
 
 Hero illustration
-https://acrobat.adobe.com/id/urn:aaid:sc:AP:c9ea9f42-541f-4678-8713-bd72b2c2a10b
+https://acrobat.adobe.com/id/urn:aaid:sc:AP:c9ea9f42-541f-4678-8713-bd72b2c2a10b/
 
 
 Quick visual guide below will help viewers understand the app at a glance — what you do (add investments), what the app calculates, and what it shows.
 
 ## Features (visual)
-- Add investments (stock / mutual fund) — docs/images/add.png
-- Calculate total investment — docs/images/total.png
-- Calculate profit or loss — docs/images/profit.png
-- Show portfolio summary (table + charts) — https://acrobat.adobe.com/id/urn:aaid:sc:AP:c9ea9f42-541f-4678-8713-bd72b2c2a10b
+- Add investments (stock / mutual fund) — docs/images/add.png/
+- Calculate total investment — docs/images/total.png/
+- Calculate profit or loss — docs/images/profit.png/
+- Show portfolio summary (table + charts) — https://acrobat.adobe.com/id/urn:aaid:sc:AP:c9ea9f42-541f-4678-8713-bd72b2c2a10b/
 
 
 
