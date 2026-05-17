@@ -1,1 +1,760 @@
+import React, { useState, useEffect } from 'react';
+import { Search, Shield, Lock, TrendingUp, BarChart3, PieChart, ArrowUpRight, CheckCircle2, Eye, Zap, Globe } from 'lucide-react';
 
+const AnimatedCounter = ({ target, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+
+  return <span>{count}+</span>;
+};
+
+export default function VestureManagement() {
+  const [scrollY, setScrollY] = useState(0);
+  const [hoverCard, setHoverCard] = useState(null);
+  const [activeTab, setActiveTab] = useState('equities');
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="w-full bg-white overflow-hidden">
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideInFromLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideInFromRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .animate-slide-in-left {
+          animation: slideInFromLeft 0.8s ease-out forwards;
+        }
+
+        .animate-slide-in-right {
+          animation: slideInFromRight 0.8s ease-out forwards;
+        }
+
+        .animate-pulse-glow {
+          animation: pulse-glow 2s infinite;
+        }
+
+        /* Smooth scrollbar */
+        ::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #f5f5f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+
+        /* Selection styling */
+        ::selection {
+          background-color: #1e40af;
+          color: white;
+        }
+
+        /* Smooth transitions */
+        * {
+          transition-property: color, background-color, border-color, box-shadow;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 150ms;
+        }
+
+        a, button {
+          transition-duration: 200ms;
+        }
+      `}</style>
+
+  return (
+    <div className="w-full bg-white overflow-hidden">
+      {/* ============ NAVIGATION BAR ============ */}
+      <nav className="fixed top-0 w-full bg-white border-b border-gray-100 z-50 backdrop-blur-xl bg-opacity-95 shadow-sm">
+        <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">V</span>
+            </div>
+            <div className="text-2xl font-bold text-gray-900" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>
+              Vesture
+            </div>
+          </div>
+          <div className="flex items-center gap-12">
+            {[
+              { icon: TrendingUp, label: 'INSIGHTS', color: 'hover:text-blue-600' },
+              { icon: BarChart3, label: 'SECTORS', color: 'hover:text-blue-600' },
+              { icon: Shield, label: 'RISK MGMT', color: 'hover:text-blue-600' },
+              { icon: Globe, label: 'ESG', color: 'hover:text-blue-600' },
+            ].map((item, i) => (
+              <button key={i} className={`text-sm font-semibold text-gray-700 ${item.color} transition-colors flex items-center gap-2 group`}>
+                <item.icon size={18} className="group-hover:scale-110 transition-transform" /> 
+                {item.label}
+              </button>
+            ))}
+          </div>
+          <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all hover:shadow-lg text-sm">
+            Sign In
+          </button>
+        </div>
+      </nav>
+
+      {/* ============ HERO SECTION ============ */}
+      <section className="pt-32 pb-20 px-8 relative overflow-hidden">
+        {/* Animated background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 opacity-95" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(255,255,255,.05) 25%, rgba(255,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.05) 75%, rgba(255,255,255,.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255,255,255,.05) 25%, rgba(255,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.05) 75%, rgba(255,255,255,.05) 76%, transparent 77%, transparent)',
+          backgroundSize: '50px 50px'
+        }} />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-2 gap-20 items-center">
+            {/* Left Content */}
+            <div className="space-y-8 animate-fade-in">
+              <div className="space-y-4">
+                <div className="inline-block px-3 py-1 bg-blue-500 bg-opacity-20 border border-blue-400 border-opacity-50 rounded-full">
+                  <span className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Enterprise Investment Platform</span>
+                </div>
+                <h1 className="text-7xl font-bold text-white leading-tight" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-2px' }}>
+                  Vesture<br />Management
+                </h1>
+                <p className="text-xl text-blue-100 max-w-md leading-relaxed font-light">
+                  Institutional-grade portfolio management designed for sophisticated investors seeking transparency and performance.
+                </p>
+              </div>
+
+              {/* Search Bar with animation */}
+              <div className="relative w-full max-w-sm group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500" />
+                <div className="relative flex items-center bg-white bg-opacity-95 rounded-lg shadow-xl hover:shadow-2xl transition-shadow">
+                  <Search className="absolute left-4 text-gray-400" size={20} />
+                  <input
+                    type="text"
+                    placeholder="Search securities, assets, strategies..."
+                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none text-gray-800 placeholder-gray-500 text-sm"
+                  />
+                  <button className="absolute right-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded transition-colors">
+                    Go
+                  </button>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex items-center gap-4 pt-4">
+                <button className="group px-8 py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold rounded-lg transition-all hover:shadow-lg hover:shadow-amber-500/30 hover:scale-105 active:scale-95 flex items-center gap-2">
+                  Get Started
+                  <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
+                <button className="px-8 py-3.5 bg-white bg-opacity-10 backdrop-blur-sm border-2 border-white text-white font-semibold rounded-lg hover:bg-opacity-20 transition-all hover:border-blue-200">
+                  Book a Demo
+                </button>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="flex items-center gap-8 pt-4">
+                {[
+                  { icon: CheckCircle2, text: 'SEC Regulated' },
+                  { icon: Eye, text: 'SOC 2 Certified' },
+                  { icon: Zap, text: '99.99% Uptime' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-blue-200 text-sm">
+                    <item.icon size={16} className="text-amber-400" />
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Dashboard Widget - Enhanced */}
+            <div className="relative group">
+              {/* Glow effect */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition duration-500" />
+              
+              <div className="relative bg-white bg-opacity-10 backdrop-blur-2xl rounded-2xl border border-white border-opacity-20 p-8 space-y-6 shadow-2xl hover:border-opacity-40 transition-all">
+                {/* Header with live indicator */}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-white font-bold text-lg">Portfolio Overview</h3>
+                  <div className="flex items-center gap-2 text-xs text-green-300">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    Live Data
+                  </div>
+                </div>
+
+                {/* Main metrics */}
+                <div className="bg-white bg-opacity-95 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Assets Under Management</p>
+                      <p className="text-4xl font-bold text-gray-900 mt-2">$2.47B</p>
+                      <p className="text-xs text-gray-600 mt-1">Across 12,400+ securities</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center justify-end gap-1 mb-2">
+                        <ArrowUpRight size={20} className="text-green-500" />
+                        <span className="text-2xl font-bold text-green-500">+8.2%</span>
+                      </div>
+                      <p className="text-xs text-gray-600">Year-to-date return</p>
+                    </div>
+                  </div>
+
+                  {/* Animated chart */}
+                  <div className="h-16 bg-gradient-to-t from-blue-100 to-transparent rounded-lg flex items-end justify-between px-2 space-x-1 py-2">
+                    {[45, 55, 48, 72, 65, 58, 78, 62, 85, 70, 60, 75].map((height, i) => (
+                      <div
+                        key={i}
+                        className="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t opacity-80 hover:opacity-100 transition-all hover:from-blue-600 hover:to-blue-500"
+                        style={{
+                          height: `${height}%`,
+                          animation: `grow 0.6s ease-out ${i * 50}ms both`
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <style>{`
+                    @keyframes grow {
+                      from { height: 0; opacity: 0; }
+                      to { height: var(--height); opacity: 1; }
+                    }
+                  `}</style>
+                </div>
+
+                {/* Asset allocation tabs */}
+                <div className="space-y-4">
+                  <div className="flex gap-2 bg-white bg-opacity-5 rounded-lg p-1">
+                    {['equities', 'fixed', 'alts'].map(tab => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`flex-1 px-3 py-2 rounded text-xs font-bold transition-all ${
+                          activeTab === tab
+                            ? 'bg-white bg-opacity-95 text-blue-900 shadow-lg'
+                            : 'text-blue-100 hover:bg-white hover:bg-opacity-10'
+                        }`}
+                      >
+                        {tab === 'equities' ? 'Equities' : tab === 'fixed' ? 'Fixed Income' : 'Alternatives'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="bg-white bg-opacity-95 rounded-xl p-4">
+                    {activeTab === 'equities' && (
+                      <div className="space-y-3">
+                        {[
+                          { name: 'US Large Cap', value: '35%', color: 'bg-blue-500' },
+                          { name: 'International', value: '15%', color: 'bg-purple-500' },
+                          { name: 'Emerging Markets', value: '10%', color: 'bg-cyan-500' },
+                        ].map((item, i) => (
+                          <div key={i}>
+                            <div className="flex justify-between items-center mb-1.5">
+                              <span className="text-xs font-bold text-gray-700">{item.name}</span>
+                              <span className="text-xs font-bold text-gray-900">{item.value}</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                              <div className={`h-full rounded-full ${item.color}`} style={{ width: item.value }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {activeTab === 'fixed' && (
+                      <div className="space-y-3">
+                        {[
+                          { name: 'Government Bonds', value: '18%', color: 'bg-green-500' },
+                          { name: 'Corporate Bonds', value: '8%', color: 'bg-emerald-500' },
+                          { name: 'Municipal Bonds', value: '4%', color: 'bg-teal-500' },
+                        ].map((item, i) => (
+                          <div key={i}>
+                            <div className="flex justify-between items-center mb-1.5">
+                              <span className="text-xs font-bold text-gray-700">{item.name}</span>
+                              <span className="text-xs font-bold text-gray-900">{item.value}</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                              <div className={`h-full rounded-full ${item.color}`} style={{ width: item.value }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {activeTab === 'alts' && (
+                      <div className="space-y-3">
+                        {[
+                          { name: 'Private Equity', value: '12%', color: 'bg-orange-500' },
+                          { name: 'Real Estate', value: '8%', color: 'bg-amber-500' },
+                          { name: 'Hedge Funds', value: '5%', color: 'bg-yellow-500' },
+                        ].map((item, i) => (
+                          <div key={i}>
+                            <div className="flex justify-between items-center mb-1.5">
+                              <span className="text-xs font-bold text-gray-700">{item.name}</span>
+                              <span className="text-xs font-bold text-gray-900">{item.value}</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                              <div className={`h-full rounded-full ${item.color}`} style={{ width: item.value }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ ABOUT SECTION ============ */}
+      <section className="py-32 px-8 bg-gradient-to-b from-white via-blue-50 to-white relative">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-20 -z-10" />
+        
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 gap-24 items-center">
+            {/* Left Text Content */}
+            <div className="space-y-8">
+              <div>
+                <span className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">
+                  Who We Are
+                </span>
+                <h2 className="text-5xl font-bold text-gray-900 mt-6 leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+                  Strategic Capital Allocation for Institutional Excellence
+                </h2>
+              </div>
+              
+              <p className="text-lg text-gray-700 leading-relaxed font-light">
+                Vesture Management combines decades of institutional expertise with cutting-edge financial technology. Our platform empowers sophisticated investors to make data-driven decisions across global markets with unprecedented transparency, control, and confidence.
+              </p>
+
+              <div className="space-y-4 pt-4">
+                <p className="text-lg text-gray-700 leading-relaxed font-light">
+                  Founded by veteran portfolio managers and technologists, we believe institutional-grade investment management should be accessible, transparent, and intelligently automated.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-6 pt-8">
+                {[
+                  { stat: '$2.47B', label: 'AUM' },
+                  { stat: '12.4K', label: 'Securities' },
+                  { stat: '500+', label: 'Institutions' },
+                ].map((item, i) => (
+                  <div key={i} className="border-l-2 border-blue-600 pl-4">
+                    <p className="text-3xl font-bold text-gray-900">{item.stat}</p>
+                    <p className="text-sm text-gray-600 font-semibold mt-1">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-3 pt-6">
+                {[
+                  'Real-time market analytics & intelligence',
+                  'AI-powered portfolio recommendations',
+                  'Institutional-grade compliance & reporting',
+                  'End-to-end encryption & security'
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-gray-700">
+                    <div className="w-2 h-2 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex-shrink-0" />
+                    <span className="font-medium">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Professional Illustration */}
+            <div className="flex items-center justify-center relative group">
+              <div className="absolute -inset-8 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-all" />
+              
+              <svg viewBox="0 0 400 500" className="w-full h-auto relative z-10" style={{ maxWidth: '450px' }}>
+                {/* Animated background elements */}
+                <circle cx="200" cy="250" r="180" fill="#E3F2FD" opacity="0.5" />
+                
+                {/* Main tree structure */}
+                <g>
+                  {/* Trunk */}
+                  <path d="M 200 480 Q 195 400 200 280" stroke="#8B6F47" strokeWidth="12" fill="none" strokeLinecap="round" />
+                  
+                  {/* Main branches */}
+                  <path d="M 200 280 Q 150 240 100 180" stroke="#8B6F47" strokeWidth="10" fill="none" strokeLinecap="round" />
+                  <path d="M 200 280 Q 250 240 300 180" stroke="#8B6F47" strokeWidth="10" fill="none" strokeLinecap="round" />
+                  <path d="M 200 320 Q 140 300 80 280" stroke="#8B6F47" strokeWidth="8" fill="none" strokeLinecap="round" />
+                  <path d="M 200 320 Q 260 300 320 280" stroke="#8B6F47" strokeWidth="8" fill="none" strokeLinecap="round" />
+                  
+                  {/* Secondary branches */}
+                  <path d="M 100 180 Q 70 150 50 100" stroke="#8B6F47" strokeWidth="6" fill="none" strokeLinecap="round" />
+                  <path d="M 300 180 Q 330 150 350 100" stroke="#8B6F47" strokeWidth="6" fill="none" strokeLinecap="round" />
+                </g>
+
+                {/* Animated coins/circles */}
+                {[
+                  { cx: 100, cy: 180, r: 24, delay: 0 },
+                  { cx: 300, cy: 180, r: 24, delay: 0.2 },
+                  { cx: 80, cy: 280, r: 20, delay: 0.4 },
+                  { cx: 320, cy: 280, r: 20, delay: 0.6 },
+                  { cx: 200, cy: 100, r: 28, delay: 0.3 },
+                  { cx: 50, cy: 100, r: 18, delay: 0.5 },
+                  { cx: 350, cy: 100, r: 18, delay: 0.7 },
+                ].map((coin, i) => (
+                  <g key={i}>
+                    <circle cx={coin.cx} cy={coin.cy} r={coin.r} fill="#D4AF37" opacity="0.95" />
+                    <circle cx={coin.cx} cy={coin.cy} r={coin.r} fill="none" stroke="#B8860B" strokeWidth="2" />
+                    <text x={coin.cx} y={coin.cy + 6} textAnchor="middle" fontSize={coin.r / 1.5} fill="#8B6F47" fontWeight="bold">$</text>
+                  </g>
+                ))}
+
+                {/* Data visualization boxes */}
+                <g opacity="0.9">
+                  <rect x="30" y="80" width="70" height="50" fill="none" stroke="#2563EB" strokeWidth="2.5" rx="6" />
+                  <polyline points="40,115 50,95 60,105 70,80 95,100" stroke="#2563EB" strokeWidth="2.5" fill="none" />
+                  <circle cx="35" cy="120" r="2" fill="#2563EB" />
+                  <circle cx="75" cy="120" r="2" fill="#2563EB" />
+                </g>
+
+                <g opacity="0.9">
+                  <rect x="300" y="80" width="70" height="50" fill="none" stroke="#2563EB" strokeWidth="2.5" rx="6" />
+                  <polyline points="310,115 320,95 330,105 340,80 365,100" stroke="#2563EB" strokeWidth="2.5" fill="none" />
+                  <circle cx="305" cy="120" r="2" fill="#2563EB" />
+                  <circle cx="345" cy="120" r="2" fill="#2563EB" />
+                </g>
+
+                {/* Leaf accents */}
+                <ellipse cx="70" cy="160" rx="8" ry="12" fill="#10B981" opacity="0.6" transform="rotate(-30 70 160)" />
+                <ellipse cx="330" cy="160" rx="8" ry="12" fill="#10B981" opacity="0.6" transform="rotate(30 330 160)" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FEATURES GRID SECTION ============ */}
+      <section className="py-32 px-8 bg-white relative overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-50 rounded-full blur-3xl" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="mb-16">
+            <span className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+              Core Capabilities
+            </span>
+            <h2 className="text-5xl font-bold text-gray-900 mb-4 leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+              Everything You Need for Institutional Success
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl font-light">
+              Comprehensive tools and insights designed for modern portfolio management
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-12">
+            {/* Left: Features Grid */}
+            <div className="space-y-8">
+              {[
+                {
+                  num: '01',
+                  title: 'Portfolio Analytics',
+                  description: 'Advanced performance tracking, attribution analysis, and risk decomposition across all asset classes',
+                  icon: '📊',
+                  color: 'blue'
+                },
+                {
+                  num: '02',
+                  title: 'Risk Management',
+                  description: 'Real-time risk metrics, VaR calculations, stress testing, and scenario analysis',
+                  icon: '⚡',
+                  color: 'purple'
+                },
+                {
+                  num: '03',
+                  title: 'Market Intelligence',
+                  description: 'Institutional-grade research, market insights, and proprietary data analysis',
+                  icon: '🎯',
+                  color: 'cyan'
+                },
+                {
+                  num: '04',
+                  title: 'Reporting & Compliance',
+                  description: 'Customizable reports, compliance documentation, and regulatory-grade audit trails',
+                  icon: '📄',
+                  color: 'emerald'
+                },
+              ].map((feature) => (
+                <div
+                  key={feature.num}
+                  className="group relative p-8 bg-white rounded-xl border border-gray-200 hover:border-blue-400 transition-all duration-300 cursor-pointer overflow-hidden"
+                  onMouseEnter={() => setHoverCard(feature.num)}
+                  onMouseLeave={() => setHoverCard(null)}
+                >
+                  {/* Gradient background on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+                  
+                  <div className="flex items-start gap-6">
+                    <div className="flex-shrink-0">
+                      <div className={`flex items-center justify-center h-16 w-16 rounded-lg bg-${feature.color}-50 group-hover:bg-${feature.color}-100 transition-colors duration-300 shadow-sm group-hover:shadow-md`}>
+                        <span className="text-3xl">{feature.icon}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-blue-600 group-hover:text-blue-700 tracking-widest uppercase">{feature.num}</p>
+                      <h3 className="text-lg font-bold text-gray-900 mt-3 group-hover:text-blue-900 transition-colors">{feature.title}</h3>
+                      <p className="text-gray-600 text-sm mt-2 leading-relaxed group-hover:text-gray-700 transition-colors">{feature.description}</p>
+                    </div>
+                  </div>
+
+                  {/* Accent bar */}
+                  <div className="absolute right-0 top-0 h-1 w-0 group-hover:w-full bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-300" />
+                </div>
+              ))}
+            </div>
+
+            {/* Right: Professional Photo Grid */}
+            <div className="grid grid-cols-2 gap-6">
+              {[
+                { name: 'Senior Portfolio Manager', role: 'Strategy & Optimization', colors: ['from-blue-400', 'to-blue-700'], icon: '👨‍💼' },
+                { name: 'Risk Analyst', role: 'Compliance & Control', colors: ['from-purple-400', 'to-purple-700'], icon: '👨‍💻' },
+                { name: 'Market Researcher', role: 'Intelligence & Insights', colors: ['from-indigo-400', 'to-indigo-700'], icon: '👨‍🔬' },
+                { name: 'Compliance Officer', role: 'Regulatory & Audit', colors: ['from-slate-400', 'to-slate-700'], icon: '👨‍⚖️' },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="group relative h-72 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Gradient background with professional look */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.colors[0]} ${item.colors[1]}`}>
+                    <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col items-center justify-center space-y-4">
+                      <div className="text-7xl group-hover:scale-110 transition-transform duration-300">{item.icon}</div>
+                      <div className="text-center text-white">
+                        <p className="text-sm font-bold leading-tight">{item.name}</p>
+                        <p className="text-xs opacity-90 mt-1 font-medium">{item.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Overlay effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300" />
+                  
+                  {/* Border accent */}
+                  <div className="absolute inset-0 border-2 border-white border-opacity-0 group-hover:border-opacity-30 transition-all duration-300 rounded-xl" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ TRUST BANNER ============ */}
+      <section className="py-16 px-8 bg-gradient-to-r from-emerald-900 via-green-900 to-emerald-900 text-white relative overflow-hidden">
+        {/* Animated background pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: 'radial-gradient(circle at 20% 50%, #ffffff 0%, transparent 50%), radial-gradient(circle at 80% 80%, #ffffff 0%, transparent 50%)',
+        }} />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-4 gap-8 items-center">
+            {/* Left text content */}
+            <div className="col-span-2">
+              <h3 className="text-3xl font-bold mb-3 leading-tight">
+                Enterprise-Grade Security & Compliance
+              </h3>
+              <p className="text-green-100 text-lg leading-relaxed font-light">
+                SEC & FINRA regulated. SOC 2 Type II certified. End-to-end AES-256 encryption. 99.99% uptime SLA. ISO 27001 compliant.
+              </p>
+            </div>
+
+            {/* Right compliance indicators */}
+            <div className="col-span-2 grid grid-cols-3 gap-6">
+              {[
+                { icon: Lock, label: 'End-to-End\nEncryption', desc: 'AES-256' },
+                { icon: Shield, label: 'SOC 2\nCertified', desc: 'Type II' },
+                { icon: CheckCircle2, label: 'Regulatory\nCompliance', desc: 'SEC/FINRA' },
+              ].map((item, i) => (
+                <div key={i} className="text-center group cursor-pointer">
+                  <div className="flex justify-center mb-3">
+                    <div className="p-4 bg-white bg-opacity-10 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 transform group-hover:scale-110">
+                      <item.icon size={32} className="text-amber-300 group-hover:text-amber-200 transition-colors" />
+                    </div>
+                  </div>
+                  <p className="text-sm font-bold text-green-50 whitespace-pre-line">{item.label}</p>
+                  <p className="text-xs text-green-200 mt-2 font-medium">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ TESTIMONIAL & CTA SECTION ============ */}
+      <section className="py-32 px-8 bg-gradient-to-b from-white to-blue-50 relative">
+        <div className="absolute top-20 right-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-10" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid grid-cols-12 gap-12 items-center bg-white rounded-2xl shadow-xl p-12 border border-gray-200 hover:border-blue-200 transition-all duration-300">
+            {/* Left: Executive Profile */}
+            <div className="col-span-3 text-center">
+              <div className="w-40 h-52 mx-auto rounded-xl bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-7xl shadow-lg hover:shadow-2xl transition-all group cursor-pointer transform hover:scale-105">
+                <span className="group-hover:text-8xl transition-all">👔</span>
+              </div>
+              <div className="mt-6">
+                <h4 className="text-2xl font-bold text-gray-900">Robert Chen</h4>
+                <p className="text-sm text-blue-600 font-bold uppercase tracking-widest mt-2">Chief Investment Officer</p>
+                <p className="text-xs text-gray-600 mt-3 leading-relaxed">15+ years managing $50B+ AUM across global markets</p>
+              </div>
+            </div>
+
+            {/* Center: Testimonial */}
+            <div className="col-span-5 space-y-6 border-l-4 border-amber-400 pl-8">
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-amber-400 text-2xl">★</span>
+                ))}
+              </div>
+              <p className="text-2xl text-gray-900 font-light leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>
+                "Vesture Management fundamentally transformed our capital allocation process. The platform's transparency, intelligence, and precision have generated measurable outperformance while reducing operational overhead by 40%."
+              </p>
+              <div>
+                <p className="text-sm text-gray-600 font-semibold">Robert Chen</p>
+                <p className="text-xs text-gray-500 mt-1">Pioneer Capital Partners</p>
+              </div>
+            </div>
+
+            {/* Right: CTAs */}
+            <div className="col-span-4 space-y-4">
+              <button className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-lg transition-all hover:shadow-lg text-center flex items-center justify-center gap-2 group shadow-lg">
+                <Lock size={18} />
+                Access Portal
+                <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </button>
+              <button className="w-full px-8 py-4 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-gray-900 font-bold rounded-lg transition-all hover:shadow-lg shadow-md">
+                Schedule Consultation
+              </button>
+              <button className="w-full px-8 py-3 text-blue-600 hover:text-blue-700 font-semibold rounded-lg border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-all">
+                Download Brochure
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FOOTER ============ */}
+      <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300 px-8 py-16 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-5 gap-12 mb-12">
+            {/* Brand column */}
+            <div className="col-span-1">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">V</span>
+                </div>
+                <span className="text-white font-bold text-lg" style={{ fontFamily: 'Georgia, serif' }}>Vesture</span>
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed mb-6">
+                Enterprise portfolio management for institutional investors worldwide.
+              </p>
+              <div className="flex gap-4">
+                {['LinkedIn', 'Twitter', 'Facebook'].map((social, i) => (
+                  <a key={i} href="#" className="text-gray-500 hover:text-blue-400 transition-colors text-sm font-medium">
+                    {social.charAt(0)}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation columns */}
+            {[
+              { title: 'Product', links: ['Features', 'Pricing', 'Security', 'Roadmap'] },
+              { title: 'Company', links: ['About', 'Blog', 'Careers', 'Press'] },
+              { title: 'Resources', links: ['Guides', 'API Docs', 'Support', 'Status'] },
+              { title: 'Legal', links: ['Privacy', 'Terms', 'Compliance', 'Cookies'] },
+            ].map((section, i) => (
+              <div key={i}>
+                <h5 className="text-white font-bold mb-5 text-sm uppercase tracking-widest">{section.title}</h5>
+                <ul className="space-y-3">
+                  {section.links.map((link, j) => (
+                    <li key={j}>
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm font-medium">
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-500">
+                © 2024 Vesture Management LLC. All rights reserved.
+              </p>
+              <p className="text-xs text-gray-600">
+                Vesture Management is registered with the SEC as an investment adviser.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
