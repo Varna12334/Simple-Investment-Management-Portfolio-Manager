@@ -1,109 +1,42 @@
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
-
-// Fetch metrics and holdings from the backend
-async function loadDashboardData() {
+// Fetch and render Predictive ML Insights
+async function loadPredictiveAnalytics() {
     try {
-        const response = await fetch(`${API_BASE_URL}/portfolio`);
-        if (!response.ok) throw new Error("Failed to fetch portfolio data.");
+        const response = await fetch(`${API_BASE_URL}/analytics/forecast`);
+        if (!response.ok) throw new Error("Could not retrieve forecasting analytics.");
         
         const data = await response.json();
-        renderSummaryTotals(data.totals);
-        renderHoldingsTable(data.assets);
-    } catch (error) {
-        console.error("Dashboard render error:", error);
-    }
-}
+        const analyticsContainer = document.getElementById('ml-analytics-pane');
+        
+        if (!analyticsContainer) return;
+        analyticsContainer.innerHTML = ''; // Clear prior state
 
-// Render the top scoreboard metrics
-function renderSummaryTotals(totals) {
-    if (!totals) return;
-    document.getElementById('total-invested').innerText = `$${(totals.total_invested || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-    document.getElementById('total-current').innerText = `$${(totals.total_current_value || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-    
-    const pnlValue = totals.total_profit_loss || 0;
-    const roiValue = totals.total_roi || 0;
-    const pnlSpan = document.getElementById('total-pnl');
-    
-    pnlSpan.innerText = `$${pnlValue.toLocaleString(undefined, {minimumFractionDigits: 2})} (${roiValue.toFixed(2)}%)`;
-    
-    // Dynamically handle accent coloring
-    const pnlCard = pnlSpan.closest('.stat');
-    if (pnlCard) {
-        if (pnlValue >= 0) {
-            pnlCard.className = "stat profit";
-        } else {
-            pnlCard.className = "stat loss";
+        if (data.forecasts.length === 0) {
+            analyticsContainer.innerHTML = `<p class="text-sm italic text-gray-400">Add assets to activate predictive forecasting pipelines.</p>`;
+            return;
         }
-    }
-}
 
-// Build table records dynamically
-function renderHoldingsTable(assets) {
-    const tbody = document.getElementById('portfolio-table-body');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    if (!assets || assets.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888; font-style:italic;">No assets trackable. Add your first trade entry below.</td></tr>`;
-        return;
-    }
-
-    assets.forEach(asset => {
-        const isProfit = asset['Profit/Loss'] >= 0;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${asset['Asset Name']}</strong></td>
-            <td><span class="badge ${asset['Type'].toLowerCase()}">${asset['Type']}</span></td>
-            <td>${asset['Quantity']}</td>
-            <td>$${parseFloat(asset['Buy Price']).toFixed(2)}</td>
-            <td>$${parseFloat(asset['Current Price']).toFixed(2)}</td>
-            <td style="color: ${isProfit ? '#27ae60' : '#c0392b'}; font-weight: bold;">
-                ${isProfit ? '+' : ''}$${parseFloat(asset['Profit/Loss']).toFixed(2)} (${parseFloat(asset['ROI (%)']).toFixed(2)}%)
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-// Intercept Asset Entry Form Submissions
-async function submitNewAsset(event) {
-    event.preventDefault();
-    
-    const payload = {
-        name: document.getElementById('name').value,
-        type: document.getElementById('type').value,
-        quantity: parseFloat(document.getElementById('quantity').value),
-        buy_price: parseFloat(document.getElementById('buy_price').value),
-        current_price: parseFloat(document.getElementById('current_price').value)
-    };
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/invest`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+        data.forecasts.forEach(forecast => {
+            const card = document.createElement('div');
+            card.className = "p-4 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center mb-3";
+            card.innerHTML = `
+                <div>
+                    <h4 class="font-bold text-slate-800">${forecast['Asset Name']} <span class="text-xs font-normal text-slate-500">(${forecast['Type']})</span></h4>
+                    <p class="text-xs text-slate-600 mt-1">Expected 30D Target Range: <strong>$${forecast['Confidence Interval Lower']} - $${forecast['Confidence Interval Upper']}</strong></p>
+                </div>
+                <div class="text-right">
+                    <span class="text-lg font-extrabold text-indigo-600">$${forecast['Projected 30D Target']}</span>
+                    <div class="text-[10px] uppercase font-bold mt-1 tracking-wider text-emerald-600">${forecast['Signal']}</div>
+                </div>
+            `;
+            analyticsContainer.appendChild(card);
         });
-
-        if (response.ok) {
-            document.getElementById('asset-form').reset();
-            loadDashboardData(); // Refresh metrics instantly
-        } else {
-            alert("Error trying to persist item metrics.");
-        }
     } catch (error) {
-        console.error("Networking payload error:", error);
+        console.error("ML Render Error:", error);
     }
 }
 
-// Bind initialization listeners
+// Append to your DOMContentLoaded pipeline inside your script:
 document.addEventListener('DOMContentLoaded', () => {
-    // Force route verification
-    if (typeof checkSession === 'function') checkSession();
-    
-    loadDashboardData();
-    
-    const assetForm = document.getElementById('asset-form');
-    if (assetForm) {
-        assetForm.addEventListener('submit', submitNewAsset);
-    }
+    // ... items from before
+    loadPredictiveAnalytics(); 
 });
