@@ -1,92 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Portfolio Manager</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
-    <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <div class="logo">📈 InvestManager</div>
-            <ul class="sidebar-menu">
-                <li><a href="dashboard.html" class="active">🏠 Dashboard</a></li>
-                <li><a href="index.html">🌐 Home</a></li>
-                <li><a href="login.html">🔓 Logout</a></li>
-            </ul>
-        </aside>
+// Fetch metrics and holdings from the backend
+async function loadDashboardData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/portfolio`);
+        if (!response.ok) throw new Error("Failed to fetch portfolio data.");
+        
+        const data = await response.json();
+        renderSummaryTotals(data.totals);
+        renderHoldingsTable(data.assets);
+    } catch (error) {
+        console.error("Dashboard render error:", error);
+    }
+}
 
-        <main class="main-content">
-            <header class="header-summary">
-                <div>
-                    <h1>Welcome Back!</h1>
-                    <p style="color: var(--text-secondary);">Here is your performance summary for today.</p>
-                </div>
-                <button class="btn" style="width: auto; padding: 10px 20px;">+ Add Transaction</button>
-            </header>
+// Render the top scoreboard metrics
+function renderSummaryTotals(totals) {
+    if (!totals) return;
+    document.getElementById('total-invested').innerText = `$${(totals.total_invested || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    document.getElementById('total-current').innerText = `$${(totals.total_current_value || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+    
+    const pnlValue = totals.total_profit_loss || 0;
+    const roiValue = totals.total_roi || 0;
+    const pnlSpan = document.getElementById('total-pnl');
+    
+    pnlSpan.innerText = `$${pnlValue.toLocaleString(undefined, {minimumFractionDigits: 2})} (${roiValue.toFixed(2)}%)`;
+    
+    // Dynamically handle accent coloring
+    const pnlCard = pnlSpan.closest('.stat');
+    if (pnlCard) {
+        if (pnlValue >= 0) {
+            pnlCard.className = "stat profit";
+        } else {
+            pnlCard.className = "stat loss";
+        }
+    }
+}
 
-            <section class="metrics-grid">
-                <div class="card">
-                    <div class="title">Total Portfolio Value</div>
-                    <div class="value">$12,450.00</div>
-                </div>
-                <div class="card">
-                    <div class="title">Total Invested</div>
-                    <div class="value">$10,000.00</div>
-                </div>
-                <div class="card">
-                    <div class="title">Total Gain/Loss</div>
-                    <div class="value profit">+$2,450.00 (+24.5%)</div>
-                </div>
-            </section>
+// Build table records dynamically
+function renderHoldingsTable(assets) {
+    const tbody = document.getElementById('portfolio-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
 
-            <section class="table-container">
-                <div style="padding: 20px; font-weight: 600; border-bottom: 1px solid var(--border-color);">
-                    Current Asset Holdings
-                </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Asset Name</th>
-                            <th>Ticker</th>
-                            <th>Shares Held</th>
-                            <th>Avg Price</th>
-                            <th>Current Value</th>
-                            <th>Returns</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Apple Inc.</strong></td>
-                            <td>AAPL</td>
-                            <td>15</td>
-                            <td>$175.00</td>
-                            <td>$2,700.00</td>
-                            <td class="profit">+4.2%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Bitcoin</strong></td>
-                            <td>BTC</td>
-                            <td>0.12</td>
-                            <td>$62,000.00</td>
-                            <td>$7,440.00</td>
-                            <td class="profit">+12.8%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Tesla Inc.</strong></td>
-                            <td>TSLA</td>
-                            <td>8</td>
-                            <td>$220.00</td>
-                            <td>$1,310.00</td>
-                            <td class="loss">-5.1%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
+    if (!assets || assets.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888; font-style:italic;">No assets trackable. Add your first trade entry below.</td></tr>`;
+        return;
+    }
 
-</body>
-</html>
+    assets.forEach(asset => {
+        const isProfit = asset['Profit/Loss'] >= 0;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${asset['Asset Name']}</strong></td>
+            <td><span class="badge ${asset['Type'].toLowerCase()}">${asset['Type']}</span></td>
+            <td>${asset['Quantity']}</td>
+            <td>$${parseFloat(asset['Buy Price']).toFixed(2)}</td>
+            <td>$${parseFloat(asset['Current Price']).toFixed(2)}</td>
+            <td style="color: ${isProfit ? '#27ae60' : '#c0392b'}; font-weight: bold;">
+                ${isProfit ? '+' : ''}$${parseFloat(asset['Profit/Loss']).toFixed(2)} (${parseFloat(asset['ROI (%)']).toFixed(2)}%)
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Intercept Asset Entry Form Submissions
+async function submitNewAsset(event) {
+    event.preventDefault();
+    
+    const payload = {
+        name: document.getElementById('name').value,
+        type: document.getElementById('type').value,
+        quantity: parseFloat(document.getElementById('quantity').value),
+        buy_price: parseFloat(document.getElementById('buy_price').value),
+        current_price: parseFloat(document.getElementById('current_price').value)
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/invest`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            document.getElementById('asset-form').reset();
+            loadDashboardData(); // Refresh metrics instantly
+        } else {
+            alert("Error trying to persist item metrics.");
+        }
+    } catch (error) {
+        console.error("Networking payload error:", error);
+    }
+}
+
+// Bind initialization listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Force route verification
+    if (typeof checkSession === 'function') checkSession();
+    
+    loadDashboardData();
+    
+    const assetForm = document.getElementById('asset-form');
+    if (assetForm) {
+        assetForm.addEventListener('submit', submitNewAsset);
+    }
+});
