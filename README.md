@@ -1,4 +1,4 @@
-# Simple Investment Management — Portfolio Manager
+# Simple Investment Management — Portfolio Manager📈
 
 A small tool to manage investments (stocks / mutual funds), calculate total invested value, compute profit or loss, and show a portfolio summary.
 
@@ -65,12 +65,3 @@ plt.savefig('docs/images/portfolio_chart.png', bbox_inches='tight', dpi=150)
 - Diagrams & flowcharts: draw.io / diagrams.net, Figma, Lucidchart, or Mermaid (embedded).
 - Icons & illustrations: https://iconmonstr.com, https://undraw.co, or use simple SVGs.
 - Charts: Matplotlib, Plotly, or Excel → export PNG.
-
----
-
-If you want, I can:
-- generate the Mermaid diagram as an SVG,
-- create example chart images (PNG) from your sample data,
-- or produce ready-to-commit image files and update the README for you.
-
-Tell me which images you'd like me to create first (diagram, chart, or mockup screenshot) and — if relevant — paste a small sample of your portfolio data (ticker, quantity, buy price, current price) so I can make realistic charts.
