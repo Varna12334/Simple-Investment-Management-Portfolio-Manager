@@ -3,6 +3,7 @@ A lightweight tool designed to help you manage your investments (stocks and mutu
 
 ## Workflow
 Code snippet
+```mermaid
 graph LR
     A[Add Investment] --> B[Store Record]
     B --> C[Calculate Totals]
