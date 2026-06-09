@@ -3,13 +3,18 @@ A lightweight tool designed to help you manage your investments (stocks and mutu
 
 ## Workflow
 Code snippet
-```mermaid
 graph LR
+    
     A[Add Investment] --> B[Store Record]
+    
     B --> C[Calculate Totals]
+    
     C --> D[Compute Profit/Loss]
+    
     D --> E[Generate Summary & Charts]
+    
     E --> F[Export Reports]
+
 ## Features
 Track Investments: Easily record your stock and mutual fund holdings.
 
