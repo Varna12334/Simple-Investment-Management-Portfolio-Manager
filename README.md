@@ -38,11 +38,11 @@ python portfolio.py
 Project Structure
 backend/: Core calculation logic.
 
-#### data/: 
+#### data: 
 Contains sample_data.csv for initial testing.
 
-#### frontend/:
+#### frontend:
 UI components for the dashboard.
 
-#### docs/: 
+#### docs: 
 Supporting documentation and visual assets.
