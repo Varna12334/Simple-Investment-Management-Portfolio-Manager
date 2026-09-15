@@ -11,36 +11,45 @@
 
 ## 🔄 Workflow
 
-```mermaid
-graph LR
-    A[Add Investment] --> B[Store Record]
-    B --> C[Calculate Totals]
-    C --> D[Compute Profit/Loss]
-    D --> E[Generate Summary & Analytics]
-    E --> F[Export Reports]'''
+| Step | Action | Description |
+| :--- | :--- | :--- |
+| **1** | **Add Investment** | Record your stock and mutual fund holdings. |
+| **2** | **Store Record** | Save data securely into local storage/CSV. |
+| **3** | **Calculate Totals** | Automatically compute total invested and current value. |
+| **4** | **Compute Profit/Loss** | Determine net returns and percentage gains. |
+| **5** | **Generate Reports** | Display clean summary metrics and dashboards. |
 
+---
 
 ## ✨ Features
-Track Investments: Easily record your stock and mutual fund holdings.
-Performance Metrics: Automatically calculate total invested value and current profit/loss.
-Visual Insights: Generate clear portfolio allocation charts and summary tables.
+* **Track Investments:** Easily record your stock and mutual fund holdings.
+* **Performance Metrics:** Automatically calculate total invested value and current profit/loss.
+* **Visual Insights:** Generate clear portfolio allocation charts and summary tables.
 
-## Quick Start
+---
+
+## 📂 Project Structure
+
+| Folder / File | Description |
+| :--- | :--- |
+| `backend/` | Core calculation logic and data handlers (`portfolio_core.py`) |
+| `data/` | Persistent storage and sample datasets (`data.csv`) |
+| `frontend/` | UI components and dashboard interface templates |
+| `docs/` | Supporting documentation and visual assets |
+| `portfolio.py` | Main application script / CLI entry point |
+| `requirements.txt` | Python package dependencies |
+
+---
+
+## 🚀 Quick Start
+
 ### 1. Installation
 Clone the repository and install the required dependencies:
 
-#### Bash
-git clone https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git
+```bash
+git clone [https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git](https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git)
 cd Simple-Investment-Management-Portfolio-Manager
 pip install -r requirements.txt
-
-### 2. Usage
-Run the main application to start managing your portfolio:
-
-#### Bash
-python portfolio.py
-Project Structure
-backend/: Core calculation logic.
 
 #### data: 
 Contains sample_data.csv for initial testing.
