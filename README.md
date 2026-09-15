@@ -1,18 +1,22 @@
-## Simple Investment Management — Portfolio Manager 📈
-A lightweight tool designed to help you manage your investments (stocks and mutual funds), track your total invested value, and visualize your portfolio performance.
+# 📈 Simple Investment Management — Portfolio Manager
 
-## Workflow
-Code snippet
+> A lightweight, user-friendly tool designed to help you manage your investments, track your total invested value, and visualize portfolio performance effortlessly.
+
+![Python](https://img.shields.io/badge/python-%233776AB.svg?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+
+---
+
+## 🔄 Workflow
+
+```mermaid
 graph LR
-    
     A[Add Investment] --> B[Store Record]
-    
     B --> C[Calculate Totals]
-    
     C --> D[Compute Profit/Loss]
-    
-    D --> E[Generate Summary & Charts]
-    
+    D --> E[Generate Summary & Analytics]
     E --> F[Export Reports]
 
 ## Features
@@ -30,6 +34,7 @@ Clone the repository and install the required dependencies:
 git clone https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git
 cd Simple-Investment-Management-Portfolio-Manager
 pip install -r requirements.txt
+
 ### 2. Usage
 Run the main application to start managing your portfolio:
 
