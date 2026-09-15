@@ -50,8 +50,8 @@ Clone the repository and install the required dependencies:
 git clone [https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git](https://github.com/Varna12334/Simple-Investment-Management-Portfolio-Manager.git)
 cd Simple-Investment-Management-Portfolio-Manager
 pip install -r requirements.txt
-
-#### data: 
+---
+### data: 
 Contains sample_data.csv for initial testing.
 
 #### frontend:
