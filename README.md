@@ -19,12 +19,11 @@ graph LR
     D --> E[Generate Summary & Analytics]
     E --> F[Export Reports]
 
-## Features
-Track Investments: Easily record your stock and mutual fund holdings.
+## ✨ Features
 
-Performance Metrics: Automatically calculate total invested value and current profit/loss.
-
-Visual Insights: Generate clear portfolio allocation charts and summary tables.
+* **Track Investments:** Easily record your stock and mutual fund holdings.
+* **Performance Metrics:** Automatically calculate total invested value and current profit/loss.
+* **Visual Insights:** Generate clear portfolio allocation charts and summary tables.
 
 ## Quick Start
 ### 1. Installation
